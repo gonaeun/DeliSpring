@@ -13,16 +13,17 @@ class CustomUserDetailsTest {
     void getUserId_잘_꺼내오는지() {
         //given
         Long expectedUserId = 1L;
-        String emial = "test@example.com";
+        String email = "test@example.com";
         String password = "password";
         Collection<GrantedAuthority> authorities = List.of();
 
-        CustomUserDetails userDetails = new CustomUserDetails(expectedUserId, emial, password, authorities);
+        CustomUserDetails userDetails = new CustomUserDetails(expectedUserId, email, password, authorities);
 
         //when
         Long realUserId = userDetails.getUserId();
 
         //then
+        System.out.println("realUserId = " + realUserId);
         assertEquals(expectedUserId, realUserId);
     }
 }
