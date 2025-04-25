@@ -1,5 +1,5 @@
 package com.example.deliveryoutsourcing.domain.user.service;
 
-public interface UserService {
+public class UserServiceImpl {
 
 }

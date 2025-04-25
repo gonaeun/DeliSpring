@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class JwtToken {
 
-    private String grantType;
+    private String grantType;  // Bearer
     private String accessToken;
     private String refreshToken;
 }
