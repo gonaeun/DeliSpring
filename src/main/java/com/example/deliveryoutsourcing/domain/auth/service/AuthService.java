@@ -59,8 +59,22 @@ public class AuthService {  // 인증 로직 수행
         if (!passwordEncoder.matches(dto.getPassword(), findUser.getPassword())) {  // 비밀번호 일치하는지
             throw new ApiException(ErrorType.INVALID_PASSWORD);
         }
-        return jwtProvider.generateToken(findUser.getId());  // 유저의 id로 jwt토큰 생성 (generateToken()은 accessToken, refreshToken 한쌍 만들어냄)
+        String refreshToken = findUser.getRefreshToken();
+
+        if (refreshToken == null || jwtProvider.isTokenExpired(refreshToken)) {
+            refreshToken = jwtProvider.generateRefreshToken(findUser.getId());
+            saveToken(findUser.getId(), refreshToken);
+        }
+
+        String accessToken = jwtProvider.generateAccessToken(findUser.getId());
+
+        return JwtToken.builder()
+            .grantType("Bearer")
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
+            .build();
     }
+
 
     /**
      * 로그아웃 >> DB에 저장된 refreshToken을 삭제
@@ -73,18 +87,33 @@ public class AuthService {  // 인증 로직 수행
     }
 
     /**
-     * accessToken을 재발급
+     * 클라이언트가 Authorization 헤더로 넘긴 Bearer토큰을 받아서
+     * accessToken을 새로 발급
      */
     public JwtToken reIssue(String bearerToken) {
-        String refreshToken = bearerToken.replace("Bearer ", ""); // 실제 토큰 문자열만 추출
-        return jwtProvider.refreshToken(refreshToken);  // jwtProvider에 넘김
+        String refreshToken = bearerToken.replace("Bearer ", ""); // 문자열 삭제해서 실제 refreshToken 값만 추출
+        Long userId = jwtProvider.extractUserId(refreshToken); // 토큰에서 userId 꺼내서
+
+        String savedRefreshToken = getRefreshToken(userId); // db에 저장된 userId의 refreshToken 가져옴
+
+        if (!refreshToken.equals(savedRefreshToken)) { // 클라이언트와 db의 두 토큰이 다를 경우
+            log.warn("Refresh Token mismatch for userId={}", userId);
+            throw new ApiException(ErrorType.REFRESH_TOKEN_MISMATCH);
+        }
+
+        String newAccessToken = jwtProvider.generateAccessToken(userId); // 같다면, AccessToken 새로 발급
+        return JwtToken.builder()
+            .grantType("Bearer")
+            .accessToken(newAccessToken)
+            .refreshToken(refreshToken)
+            .build();
     }
+
 
     /**
      * refreshToken 가져오기
      */
     public String getRefreshToken(long userId) {
-
         User findUser = userRepository.findById(userId)
             .orElseThrow(() -> new ApiException(ErrorType.USER_NOT_FOUND));
         return findUser.getRefreshToken();
