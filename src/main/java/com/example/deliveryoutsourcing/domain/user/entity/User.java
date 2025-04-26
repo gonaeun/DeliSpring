@@ -35,6 +35,10 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
     @Column(nullable = false, length = 8)
     private String nickname;
 

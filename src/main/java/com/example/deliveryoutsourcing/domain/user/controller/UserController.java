@@ -62,4 +62,17 @@ public class UserController {
         userService.updateAddress(userId, requestDto.getAddress());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    /**
+     * 비밀번호 변경
+     */
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<Void> updatePassword(
+        @PathVariable Long userId,
+        @Valid @RequestBody UserRequestDto.UpdatePassword requestDto
+    ) {
+        userService.updatePassword(userId, requestDto.getCurrentPassword(), requestDto.getNewPassword());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }

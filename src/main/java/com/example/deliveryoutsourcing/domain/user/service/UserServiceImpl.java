@@ -53,8 +53,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updatePassword(Long userId, String currentPassword, String newPassword) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ApiException(ErrorType.USER_NOT_FOUND));
 
+        if (user.isDeleted()) {
+            throw new ApiException(ErrorType.ALREADY_WITHDRAWN_USER);
+        }
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new ApiException(ErrorType.INVALID_PASSWORD);
+        }
+
+        user.updatePassword(passwordEncoder.encode(newPassword)); // 새 비밀번호로 암호화 저장
     }
+
 
     @Override
     public void updateAddress(Long userId, String address) {
