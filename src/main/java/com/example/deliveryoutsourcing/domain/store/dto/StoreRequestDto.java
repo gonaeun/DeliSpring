@@ -24,6 +24,25 @@ public class StoreRequestDto {
         private Integer minOrderPrice;
     }
 
+    @Getter
+    public static class Update {
 
+        @NotBlank(message = "가게 이름은 필수입니다.")
+        private String name;
 
+        @NotBlank(message = "오픈 시간은 필수입니다.")
+        private String openTime;
+
+        @NotBlank(message = "마감 시간은 필수입니다.")
+        private String closeTime;
+
+        @NotNull(message = "최소 주문 금액은 필수입니다.")
+        private Integer minOrderPrice;
+    }
+
+    @Getter
+    public static class Close {
+        @NotBlank
+        private String password;
+    }
 }

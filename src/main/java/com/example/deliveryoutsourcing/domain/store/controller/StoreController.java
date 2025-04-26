@@ -35,4 +35,53 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /**
+     * 가게 목록 조회
+     */
+    @GetMapping
+    public ResponseEntity<List<StoreResponseDto>> getStores(
+        @RequestParam(required = false) String name
+    ) {
+        List<StoreResponseDto> stores = storeService.getStores(name);
+        return ResponseEntity.ok(stores);
+    }
+
+    /**
+     * 가게 단건 조회
+     */
+    @GetMapping("/{storeId}")
+    public ResponseEntity<StoreResponseDto> getStore(@PathVariable Long storeId) {
+        StoreResponseDto store = storeService.getStore(storeId);
+        return ResponseEntity.ok(store);
+    }
+
+    /**
+     * 가게 수정 (사장님만 가능)
+     */
+    @PatchMapping("/{storeId}")
+    @OwnerOnly
+    public ResponseEntity<Void> updateStore(
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        @PathVariable Long storeId,
+        @Valid @RequestBody StoreRequestDto.Update requestDto
+    ) {
+        Long ownerId = userDetails.getUserId();
+        storeService.updateStore(ownerId, storeId, requestDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /**
+     * 가게 폐업 (사장님만 가능)
+     */
+    @PatchMapping("/{storeId}/close")
+    @OwnerOnly
+    public ResponseEntity<Void> closeStore(
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        @PathVariable Long storeId,
+        @RequestBody StoreRequestDto.Close requestDto
+    ) {
+        Long ownerId = userDetails.getUserId();
+        storeService.closeStore(ownerId, storeId, requestDto.getPassword());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

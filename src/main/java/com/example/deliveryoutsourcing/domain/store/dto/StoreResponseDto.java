@@ -13,5 +13,5 @@ public class StoreResponseDto {
     private LocalTime openTime;
     private LocalTime closeTime;
     private Integer minOrderPrice;
-    private boolean isClosed;
+    private boolean isClosed; // 폐업여부
 }

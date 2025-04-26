@@ -46,5 +46,17 @@ public class Store extends BaseEntity {
     @Column(name = "is_closed")
     private boolean isClosed = false; // 폐업여부
 
+    // 폐업 처리
+    public void close() {
+        this.isClosed = true;
+    }
+
+    // 가게 정보 수정
+    public void update(String name, LocalTime openTime, LocalTime closeTime, Integer minOrderPrice) {
+        this.name = name;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.minOrderPrice = minOrderPrice;
+    }
 
 }

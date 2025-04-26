@@ -30,14 +30,17 @@ public enum ErrorType implements ExceptionStatus{
      * 2000: user 에러
      */
     USER_NOT_FOUND(2001, HttpStatus.NOT_FOUND.value(), "존재하지 않는 사용자입니다."),
-    EMAIL_NOT_FOUND(2002, HttpStatus.NOT_FOUND.value(), "존재하지 않는 이메일입니다."),
     DUPLICATE_EMAIL(2003, HttpStatus.CONFLICT.value(), "이미 존재하는 이메일입니다."),
     DUPLICATE_NICKNAME(2004, HttpStatus.CONFLICT.value(), "이미 존재하는 닉네임입니다."),
-    ALREADY_WITHDRAWN_USER(2005, HttpStatus.CONFLICT.value(), "이미 탈퇴한 회원입니다. 요청을 처리할 수 없습니다.");
+    ALREADY_WITHDRAWN_USER(2005, HttpStatus.CONFLICT.value(), "이미 탈퇴한 회원입니다. 요청을 처리할 수 없습니다."),
 
     /**
      * 3000: store 에러
      */
+    STORE_LIMIT_EXCEEDED(3001, HttpStatus.CONFLICT.value(), "가게 최대 생성 가능 횟수를 초과하였습니다."),
+    STORE_NOT_FOUND(3002, HttpStatus.NOT_FOUND.value(), "존재하지 않는 가게입니다."),
+    STORE_ALREADY_CLOSED(3003, HttpStatus.CONFLICT.value(), "폐업한 가게입니다"),
+    STORE_OWNER_FORBIDDEN(3004, HttpStatus.FORBIDDEN.value(), "가게 수정 권한이 없습니다.");
 
     /**
      * 4000: menu 에러
