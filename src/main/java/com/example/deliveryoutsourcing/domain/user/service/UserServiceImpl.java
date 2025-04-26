@@ -58,6 +58,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateAddress(Long userId, String address) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ApiException(ErrorType.USER_NOT_FOUND));
 
+        if (user.isDeleted()) {
+            throw new ApiException(ErrorType.ALREADY_WITHDRAWN_USER);
+        }
+
+        user.updateAddress(address);
     }
+
 }

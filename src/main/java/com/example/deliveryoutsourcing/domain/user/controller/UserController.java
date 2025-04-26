@@ -52,6 +52,14 @@ public class UserController {
 
 
     /**
-     * 프로필 수정
+     * 프로필 수정 : 주소 변경
      */
+    @PatchMapping("/{userId}/address")
+    public ResponseEntity<Void> updateAddress(
+        @PathVariable Long userId,
+        @Valid @RequestBody UserRequestDto.UpdateAddress requestDto
+    ) {
+        userService.updateAddress(userId, requestDto.getAddress());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

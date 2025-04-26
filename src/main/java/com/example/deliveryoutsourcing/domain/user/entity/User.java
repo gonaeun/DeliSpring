@@ -45,6 +45,13 @@ public class User extends BaseEntity {
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
+    @Column
+    private String address;
+
+    public void updateAddress(String address) {
+        this.address = address;
+    }
+
     // 연관관계 설정
     @OneToMany(mappedBy = "owner")
     private List<Store> stores = new ArrayList<>();

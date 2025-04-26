@@ -11,4 +11,11 @@ public class UserRequestDto {
         private String password;
     }
 
+    @Getter
+    public static class UpdateAddress {
+        @NotBlank
+        private String address;
+    }
+
+
 }
