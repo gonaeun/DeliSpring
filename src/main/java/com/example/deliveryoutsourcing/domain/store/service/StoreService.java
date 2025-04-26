@@ -1,5 +1,14 @@
 package com.example.deliveryoutsourcing.domain.store.service;
 
-public class StoreService {
+import com.example.deliveryoutsourcing.domain.store.dto.StoreRequestDto;
+import com.example.deliveryoutsourcing.domain.store.dto.StoreResponseDto;
+import java.util.List;
+
+public interface StoreService {
+
+    /**
+     * 가게 생성
+     */
+    void createStore(Long ownerId, StoreRequestDto.Create requestDto);
 
 }
