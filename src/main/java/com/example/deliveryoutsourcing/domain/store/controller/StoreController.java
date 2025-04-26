@@ -4,6 +4,7 @@ import com.example.deliveryoutsourcing.domain.auth.security.CustomUserDetails;
 import com.example.deliveryoutsourcing.domain.store.dto.StoreRequestDto;
 import com.example.deliveryoutsourcing.domain.store.dto.StoreResponseDto;
 import com.example.deliveryoutsourcing.domain.store.service.StoreService;
+import com.example.deliveryoutsourcing.global.aop.OwnerOnly;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class StoreController {
      * 가게 생성 (사장님만 가능)
      */
     @PostMapping
+    @OwnerOnly
     public ResponseEntity<Void> createStore(
         @AuthenticationPrincipal CustomUserDetails userDetails,
         @Valid @RequestBody StoreRequestDto.Create requestDto
