@@ -36,7 +36,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getMyInfo(Long userId) {
-        return null;
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ErrorType.USER_NOT_FOUND));
+
+        if(user.isDeleted()) {
+            throw new ApiException(ErrorType.ALREADY_WITHDRAWN_USER);
+        }
+
+        return UserResponseDto.builder()
+            .id(user.getId())
+            .email(user.getEmail())
+            .nickname(user.getNickname())
+            .role(user.getRole())
+            .build();
     }
 
     @Override

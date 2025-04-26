@@ -1,12 +1,17 @@
 package com.example.deliveryoutsourcing.domain.user.controller;
 
+import com.example.deliveryoutsourcing.domain.auth.security.CustomUserDetails;
 import com.example.deliveryoutsourcing.domain.user.dto.UserRequestDto;
 import com.example.deliveryoutsourcing.domain.user.dto.UserResponseDto;
 import com.example.deliveryoutsourcing.domain.user.service.UserService;
 import jakarta.validation.Valid;
+import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,8 +39,17 @@ public class UserController {
 
 
     /**
-     * 프로필 조회
+     * 내 정보 조회
      */
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> getMyInfo(
+        @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Long userId = userDetails.getUserId();
+        UserResponseDto responseDto = userService.getMyInfo(userId);
+        return ResponseEntity.ok(responseDto);
+    }
+
 
     /**
      * 프로필 수정
