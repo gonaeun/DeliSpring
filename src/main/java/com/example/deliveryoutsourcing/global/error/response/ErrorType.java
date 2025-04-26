@@ -32,9 +32,7 @@ public enum ErrorType implements ExceptionStatus{
     EMAIL_NOT_FOUND(2002, HttpStatus.NOT_FOUND.value(), "존재하지 않는 이메일입니다."),
     DUPLICATE_EMAIL(2003, HttpStatus.CONFLICT.value(), "이미 존재하는 이메일입니다."),
     DUPLICATE_NICKNAME(2004, HttpStatus.CONFLICT.value(), "이미 존재하는 닉네임입니다."),
-    FORBIDDEN_PROFILE(2601, HttpStatus.FORBIDDEN.value(), "이 사용자는 프로필 비공개 설정 상태이며, 친구가 아닌 경우 정보 열람이 제한됩니다."),
-    DISABLE_USER(2602, HttpStatus.FORBIDDEN.value(), "비활성화 계정입니다. 서비스 이용을 원하시면 문의하세요."),
-    ALREADY_DEACTIVATED_ACCOUNT(2603, HttpStatus.CONFLICT.value(), "이미 비활성화 계정입니다. 요청을 처리할 수 없습니다.");
+    ALREADY_WITHDRAWN_USER(2005, HttpStatus.CONFLICT.value(), "이미 탈퇴한 회원입니다. 요청을 처리할 수 없습니다.");
 
     /**
      * 3000: store 에러

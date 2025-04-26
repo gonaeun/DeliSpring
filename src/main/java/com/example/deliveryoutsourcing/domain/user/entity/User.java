@@ -43,7 +43,7 @@ public class User extends BaseEntity {
     private Role role;
 
     @Column(name = "is_deleted")
-    private boolean deleted = false;
+    private boolean isDeleted = false;
 
     // 연관관계 설정
     @OneToMany(mappedBy = "owner")
@@ -54,6 +54,10 @@ public class User extends BaseEntity {
 
     public void updateToken(String refreshToken) { // 로그아웃
         this.refreshToken = refreshToken;
+    }
+
+    public void withdraw() {
+        this.isDeleted = true;
     }
 }
 
