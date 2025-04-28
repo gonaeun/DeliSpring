@@ -22,8 +22,7 @@ public enum ErrorType implements ExceptionStatus{
     REFRESH_TOKEN_NOT_FOUND(1009, HttpStatus.UNAUTHORIZED.value(), "저장된 리프레시 토큰이 존재하지 않습니다."),
     UNAUTHORIZED_USER(1010, HttpStatus.UNAUTHORIZED.value(), "인증된 사용자만 접근할 수 있습니다."),
     FORBIDDEN_ACCESS(1011, HttpStatus.FORBIDDEN.value(), "권한이 없는 사용자입니다."),
-    INVALID_PASSWORD(1101, HttpStatus.UNAUTHORIZED.value(), "비밀번호가 일치하지 않습니다."),
-    LOGIN_FAILED(1101, HttpStatus.UNAUTHORIZED.value(), "로그인에 실패했습니다."),
+    INVALID_PASSWORD(1012, HttpStatus.UNAUTHORIZED.value(), "비밀번호가 일치하지 않습니다."),
 
 
     /**
@@ -58,11 +57,14 @@ public enum ErrorType implements ExceptionStatus{
     ORDER_NOT_FOUND(5003, HttpStatus.NOT_FOUND.value(), "존재하지 않는 주문입니다."),
     ORDER_OWNER_FORBIDDEN(5004, HttpStatus.FORBIDDEN.value(), "주문 수정 권한이 없습니다."),
     ORDER_INVALID_STATUS_CHANGE(5005, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 주문 상태 변경입니다."),
-    MENU_NOT_SELECTED(5006, HttpStatus.BAD_REQUEST.value(), "메뉴를 선택해주세요.");
+    MENU_NOT_SELECTED(5006, HttpStatus.BAD_REQUEST.value(), "메뉴를 선택해주세요."),
 
     /**
      * 6000: review 에러
      */
+    ORDER_NOT_COMPLETED(6001, HttpStatus.BAD_REQUEST.value(), "주문이 아직 완료되지 않았습니다."),
+    REVIEW_ALREADY_EXISTS(6002, HttpStatus.CONFLICT.value(), "이미 작성된 리뷰입니다.");
+
 
     private final int code;
     private final int status;
