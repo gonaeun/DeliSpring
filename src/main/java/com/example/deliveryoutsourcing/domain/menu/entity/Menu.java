@@ -32,5 +32,23 @@ public class Menu extends BaseEntity {
     private int price;
 
     @Column(name = "is_deleted")
-    private boolean deleted = false;
+    private boolean isMenuDeleted = false;
+
+    public Menu(Store store, String name, int price) {
+        this.store = store;
+        this.name = name;
+        this.price = price;
+        this.isMenuDeleted = false;
+    }
+
+    public void update(String name, int price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public void delete() {
+        this.isMenuDeleted = true;
+    }
+
+
 }

@@ -40,11 +40,15 @@ public enum ErrorType implements ExceptionStatus{
     STORE_LIMIT_EXCEEDED(3001, HttpStatus.CONFLICT.value(), "가게 최대 생성 가능 횟수를 초과하였습니다."),
     STORE_NOT_FOUND(3002, HttpStatus.NOT_FOUND.value(), "존재하지 않는 가게입니다."),
     STORE_ALREADY_CLOSED(3003, HttpStatus.CONFLICT.value(), "폐업한 가게입니다"),
-    STORE_OWNER_FORBIDDEN(3004, HttpStatus.FORBIDDEN.value(), "가게 수정 권한이 없습니다.");
+    STORE_OWNER_FORBIDDEN(3004, HttpStatus.FORBIDDEN.value(), "가게 수정 권한이 없습니다."),
 
     /**
      * 4000: menu 에러
      */
+    MENU_OWNER_FORBIDDEN(4001, HttpStatus.FORBIDDEN.value(), "메뉴 수정 권한이 없습니다."),
+    MENU_NOT_FOUND(4002, HttpStatus.NOT_FOUND.value(), "메뉴를 찾을 수 없습니다."),
+    MENU_ALREADY_DELETED(4003, HttpStatus.BAD_REQUEST.value(), "이미 삭제된 메뉴입니다.");
+
 
     /**
      * 5000: order 에러
