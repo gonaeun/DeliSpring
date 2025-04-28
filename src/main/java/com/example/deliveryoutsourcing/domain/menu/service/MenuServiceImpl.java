@@ -1,12 +1,10 @@
 package com.example.deliveryoutsourcing.domain.menu.service;
 
 import com.example.deliveryoutsourcing.domain.menu.dto.MenuRequestDto;
-import com.example.deliveryoutsourcing.domain.menu.dto.MenuRequestDto.Update;
 import com.example.deliveryoutsourcing.domain.menu.entity.Menu;
 import com.example.deliveryoutsourcing.domain.menu.repository.MenuRepository;
 import com.example.deliveryoutsourcing.domain.store.entity.Store;
 import com.example.deliveryoutsourcing.domain.store.repository.StoreRepository;
-import com.example.deliveryoutsourcing.domain.user.entity.User;
 import com.example.deliveryoutsourcing.global.error.ApiException;
 import com.example.deliveryoutsourcing.global.error.response.ErrorType;
 import lombok.RequiredArgsConstructor;
