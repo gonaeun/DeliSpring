@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    List<Order> findAllByUserId(Long userId);  // 회원 주문 목록 조회
-
-    List<Order> findAllByStoreId(Long storeId);  // 가게 주문 목록 조회
+    List<Order> findAllByUserId(Long userId);  // 주문 목록 조회(사용자)
 
 }

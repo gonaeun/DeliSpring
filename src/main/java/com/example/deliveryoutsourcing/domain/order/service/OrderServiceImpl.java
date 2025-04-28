@@ -3,6 +3,7 @@ package com.example.deliveryoutsourcing.domain.order.service;
 import com.example.deliveryoutsourcing.domain.menu.entity.Menu;
 import com.example.deliveryoutsourcing.domain.menu.repository.MenuRepository;
 import com.example.deliveryoutsourcing.domain.order.dto.OrderRequestDto;
+import com.example.deliveryoutsourcing.domain.order.dto.OrderResponseDto;
 import com.example.deliveryoutsourcing.domain.order.dto.OrderUpdateRequestDto;
 import com.example.deliveryoutsourcing.domain.order.entity.Order;
 import com.example.deliveryoutsourcing.domain.order.entity.OrderLog;
@@ -14,6 +15,7 @@ import com.example.deliveryoutsourcing.global.enums.OrderStatus;
 import com.example.deliveryoutsourcing.global.error.ApiException;
 import com.example.deliveryoutsourcing.global.error.response.ErrorType;
 import java.time.LocalTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,6 +101,21 @@ public class OrderServiceImpl implements OrderService {
 
         orderLogRepository.save(orderLog); // Order은 (위에서) 그냥 업데이트, OrdeLog는 새로 저장됨
     }
+
+    @Override
+    @Transactional(readOnly = true)  // 조회만 가능
+    public List<OrderResponseDto> getMyOrders(Long userId) {
+        List<Order> orders = orderRepository.findAllByUserId(userId);  // userId로 본인이 주문한 모든 주문 조회
+
+        return orders.stream()
+            .map(order -> OrderResponseDto.builder()
+                .orderMenu(order.getMenu().getName())
+                .orderPrice(order.getPrice())
+                .orderStatus(order.getStatus())
+                .build())
+            .toList();
+    }
+
 
 }
 

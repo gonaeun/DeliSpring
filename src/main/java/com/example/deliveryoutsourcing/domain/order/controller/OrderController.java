@@ -2,14 +2,17 @@ package com.example.deliveryoutsourcing.domain.order.controller;
 
 import com.example.deliveryoutsourcing.domain.auth.security.CustomUserDetails;
 import com.example.deliveryoutsourcing.domain.order.dto.OrderRequestDto;
+import com.example.deliveryoutsourcing.domain.order.dto.OrderResponseDto;
 import com.example.deliveryoutsourcing.domain.order.dto.OrderUpdateRequestDto;
 import com.example.deliveryoutsourcing.domain.order.service.OrderService;
 import com.example.deliveryoutsourcing.global.aop.OwnerOnly;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +45,14 @@ public class OrderController {
     ) {
         orderService.updateOrderStatus(userDetails.getUserId(), orderId, requestDto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<OrderResponseDto>> getMyOrders(
+        @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        List<OrderResponseDto> orders = orderService.getMyOrders(userDetails.getUserId());
+        return ResponseEntity.ok(orders);  // 리스트형태로 응답 반환
     }
 
 }
