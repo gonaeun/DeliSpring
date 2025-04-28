@@ -12,13 +12,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class OrderLog {
+public class OrderLog {  // 주문 상태 변경 로그를 저장하는 용도 >> 나중에 고객이 주문 히스토리를 확인하도록 하기 위함
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +40,13 @@ public class OrderLog {
 
     @Column(nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
+
+    @Builder
+    public OrderLog(Order order, Store store, OrderStatus statusBefore, OrderStatus statusAfter) {
+        this.order = order;
+        this.store = store;
+        this.statusBefore = statusBefore;
+        this.statusAfter = statusAfter;
+        this.timestamp = LocalDateTime.now();
+    }
 }
