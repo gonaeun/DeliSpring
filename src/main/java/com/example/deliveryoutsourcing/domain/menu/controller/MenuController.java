@@ -3,6 +3,7 @@ package com.example.deliveryoutsourcing.domain.menu.controller;
 import com.example.deliveryoutsourcing.domain.auth.security.CustomUserDetails;
 import com.example.deliveryoutsourcing.domain.menu.dto.MenuRequestDto;
 import com.example.deliveryoutsourcing.domain.menu.service.MenuService;
+import com.example.deliveryoutsourcing.global.aop.OwnerOnly;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ public class MenuController {
     private final MenuService menuService;
 
     @PostMapping
+    @OwnerOnly
     public ResponseEntity<Void> createMenu(
         @AuthenticationPrincipal CustomUserDetails userDetails,
         @PathVariable Long storeId,
@@ -28,6 +30,7 @@ public class MenuController {
     }
 
     @PatchMapping("/menus/{menuId}")  //storeId가 없어도 ownerId, menuId로 비즈니스 로직 충분히 검증 가능
+    @OwnerOnly
     public ResponseEntity<Void> updateMenu(
         @AuthenticationPrincipal CustomUserDetails userDetails,
         @PathVariable Long menuId,
@@ -38,6 +41,7 @@ public class MenuController {
     }
 
     @DeleteMapping("/menus/{menuId}")
+    @OwnerOnly
     public ResponseEntity<Void> deleteMenu(
         @AuthenticationPrincipal CustomUserDetails userDetails,
         @PathVariable Long menuId
