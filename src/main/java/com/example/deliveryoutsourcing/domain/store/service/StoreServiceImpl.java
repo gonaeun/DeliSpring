@@ -1,6 +1,7 @@
 package com.example.deliveryoutsourcing.domain.store.service;
 
 import com.example.deliveryoutsourcing.config.PasswordEncoder;
+import com.example.deliveryoutsourcing.domain.menu.dto.MenuResponseDto;
 import com.example.deliveryoutsourcing.domain.store.dto.StoreRequestDto;
 import com.example.deliveryoutsourcing.domain.store.dto.StoreResponseDto;
 import com.example.deliveryoutsourcing.domain.store.entity.Store;
@@ -31,7 +32,7 @@ public class StoreServiceImpl implements StoreService {
             .orElseThrow(() -> new ApiException(ErrorType.USER_NOT_FOUND));
 
         // 가게수 3개 초과하는지 체크
-        Long storeCount = storeRepository.countByOwnerIdAndIsClosedFalse(ownerId);
+        Long storeCount = storeRepository.countByOwnerIdAndIsStoreClosedFalse(ownerId);
         if (storeCount >= 3) {
             throw new ApiException(ErrorType.STORE_LIMIT_EXCEEDED);
         }
@@ -58,12 +59,12 @@ public class StoreServiceImpl implements StoreService {
         if (name != null && !name.trim().isEmpty()) { // 검색어가 있거나, 공백만 입력하는 경우 제외
             stores = storeRepository.findAllByNameContainingIgnoreCase(name)
                 .stream()
-                .filter(store -> !store.isClosed())  // 폐업하지 않은 가게만 검색하도록 필터링
+                .filter(store -> !store.isStoreClosed())  // 폐업하지 않은 가게만 검색하도록 필터링
                 .toList();
         } else {
             stores = storeRepository.findAll()
                 .stream()
-                .filter(store -> !store.isClosed())  // 폐업하지 않은 가게만 검색하도록 필터링
+                .filter(store -> !store.isStoreClosed())  // 폐업하지 않은 가게만 검색하도록 필터링
                 .toList();
         }
 
@@ -74,16 +75,28 @@ public class StoreServiceImpl implements StoreService {
                 .openTime(store.getOpenTime())
                 .closeTime(store.getCloseTime())
                 .minOrderPrice(store.getMinOrderPrice())
-                .isClosed(store.isClosed())
+                .isClosed(store.isStoreClosed())
                 .build())
             .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public StoreResponseDto getStore(Long storeId) {  // 가게 단건 조회 (🌟🌟🌟🌟🌟메뉴 목록 추가하기!)
-        Store store = storeRepository.findByIdAndIsClosedFalse(storeId)  // 파라미터로 입력받은 가게id를 db에서 조회
+    public StoreResponseDto getStore(Long storeId) {  // 가게 단건 조회
+        Store store = storeRepository.findByIdAndIsStoreClosedFalse(storeId)  // 파라미터로 입력받은 가게id를 db에서 조회
             .orElseThrow(() -> new ApiException(ErrorType.STORE_NOT_FOUND));
+
+        // 가게 전체 조회와 다른점
+        // 가게 전체 조회는 findById-> builder 하는데
+        // 🌟가게 단건 조회는 메뉴도 보여주기 위해, 중간에 store.getMenus() 접근해서 삭제안된 메뉴만 골라서 리스트화 해준다!
+        List<MenuResponseDto> menus = store.getMenus().stream()
+            .filter(menu -> !menu.isMenuDeleted()) // 삭제 안 된 메뉴만
+            .map(menu -> MenuResponseDto.builder()
+                .menuId(menu.getId())
+                .name(menu.getName())
+                .price(menu.getPrice())
+                .build())
+            .toList();
 
         return StoreResponseDto.builder()
             .storeId(store.getId())
@@ -91,7 +104,8 @@ public class StoreServiceImpl implements StoreService {
             .openTime(store.getOpenTime())
             .closeTime(store.getCloseTime())
             .minOrderPrice(store.getMinOrderPrice())
-            .isClosed(store.isClosed())
+            .isClosed(store.isStoreClosed())
+            .menus(menus)
             .build();
     }
 
@@ -102,7 +116,7 @@ public class StoreServiceImpl implements StoreService {
         Store store = storeRepository.findById(storeId)  // 받아온 storeId로 수정할 가게 찾음
             .orElseThrow(() -> new ApiException(ErrorType.STORE_NOT_FOUND));
 
-        if (store.isClosed()) { // 폐업한 가게는 수정 못함
+        if (store.isStoreClosed()) { // 폐업한 가게는 수정 못함
             throw new ApiException(ErrorType.STORE_ALREADY_CLOSED);
         }
 
@@ -125,7 +139,7 @@ public class StoreServiceImpl implements StoreService {
         Store store = storeRepository.findById(storeId)  // storeId로 db에서 가게 조회
             .orElseThrow(() -> new ApiException(ErrorType.STORE_NOT_FOUND));
 
-        if (store.isClosed()) { // 폐업여부 체크
+        if (store.isStoreClosed()) { // 폐업여부 체크
             throw new ApiException(ErrorType.STORE_ALREADY_CLOSED);
         }
 

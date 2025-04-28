@@ -1,5 +1,6 @@
 package com.example.deliveryoutsourcing.domain.store.entity;
 
+import com.example.deliveryoutsourcing.domain.menu.entity.Menu;
 import com.example.deliveryoutsourcing.domain.user.entity.User;
 import com.example.deliveryoutsourcing.global.common.BaseEntity;
 import jakarta.persistence.Column;
@@ -10,7 +11,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,11 +48,14 @@ public class Store extends BaseEntity {
     private int minOrderPrice;
 
     @Column(name = "is_closed")
-    private boolean isClosed = false; // 폐업여부
+    private boolean isStoreClosed = false; // 폐업여부
+
+    @OneToMany(mappedBy = "store")
+    private List<Menu> menus = new ArrayList<>();
 
     // 폐업 처리
     public void close() {
-        this.isClosed = true;
+        this.isStoreClosed = true;
     }
 
     // 가게 정보 수정

@@ -1,6 +1,8 @@
 package com.example.deliveryoutsourcing.domain.store.dto;
 
+import com.example.deliveryoutsourcing.domain.menu.dto.MenuResponseDto;
 import java.time.LocalTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,4 +16,5 @@ public class StoreResponseDto {
     private LocalTime closeTime;
     private Integer minOrderPrice;
     private boolean isClosed; // 폐업여부
+    private List<MenuResponseDto> menus; // 단건조회시 메뉴 조회
 }
