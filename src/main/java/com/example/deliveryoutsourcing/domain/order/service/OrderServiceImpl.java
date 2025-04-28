@@ -29,14 +29,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void createOrder(Long userId, OrderRequestDto requestDto) {
+
+        if (requestDto.getMenuId() == null) {  // 메뉴 선택 안할때 에러터트리기
+            throw new ApiException(ErrorType.MENU_NOT_SELECTED);
+        }
+
         Menu menu = menuRepository.findById(requestDto.getMenuId())  // DB에서 해당 메뉴 찾아보기
             .orElseThrow(() -> new ApiException(ErrorType.MENU_NOT_FOUND));
 
         Store store = menu.getStore();  // 가게 확인
-
-        if (requestDto.getMenuId() == null) {
-            throw new ApiException(ErrorType.MENU_NOT_FOUND);
-        }
 
         if (menu.getPrice() < store.getMinOrderPrice()) {  // 최소주문금액 확인
             throw new ApiException(ErrorType.ORDER_PRICE_LOW);

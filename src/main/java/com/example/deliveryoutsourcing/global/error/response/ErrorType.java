@@ -58,8 +58,7 @@ public enum ErrorType implements ExceptionStatus{
     ORDER_NOT_FOUND(5003, HttpStatus.NOT_FOUND.value(), "존재하지 않는 주문입니다."),
     ORDER_OWNER_FORBIDDEN(5004, HttpStatus.FORBIDDEN.value(), "주문 수정 권한이 없습니다."),
     ORDER_INVALID_STATUS_CHANGE(5005, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 주문 상태 변경입니다."),
-    MENU_NOT_SELECTED(5006, HttpStatus.BAD_REQUEST.value(), "메뉴를 선택해주세요."),
-    ONLY_ONE_MENU_ALLOWED(5007, HttpStatus.BAD_REQUEST.value(), "각 주문에는 하나의 메뉴만 선택할 수 있습니다.");
+    MENU_NOT_SELECTED(5006, HttpStatus.BAD_REQUEST.value(), "메뉴를 선택해주세요.");
 
     /**
      * 6000: review 에러
