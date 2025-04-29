@@ -1,6 +1,7 @@
 package com.example.DeliSpring.global.error;
 
 import com.example.DeliSpring.global.error.response.ErrorResponse;
+import com.example.DeliSpring.global.error.response.ErrorType;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +24,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errors.put(error.getField(), error.getDefaultMessage());
+            String field = error.getField();
+            String message = error.getDefaultMessage();
+
+            if ("password".equals(field)) {
+                message = "비밀번호가 조건에 맞지 않습니다.";
+            }
+
+            errors.put(field, message);
         });
 
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(errors);
+            .body(new ErrorResponse(ErrorType.VALIDATION_FAILED));
     }
 
     @ExceptionHandler({ApiException.class})
