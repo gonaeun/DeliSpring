@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.beans.factory.annotation.Value;
+import com.example.DeliSpring.global.enums.Role;
+
 
 
 
@@ -45,11 +47,12 @@ public class JwtProvider {
     /**
      * 로그인 성공: AccessToken과 RefreshToken을 생성
      */
-    public String generateAccessToken(Long userId) {
+    public String generateAccessToken(Long userId, Role role) {
         long now = (new Date()).getTime();
         return Jwts.builder()
             .setSubject(String.valueOf(userId))
-            .claim("auth", "ROLE_USER")
+            .claim("auth", "ROLE_" + role.name())
+            .claim("add", role.name())
             .claim("iss", "off")
             .setExpiration(new Date(now + 3600000))  // 1시간
             .setIssuedAt(new Date())

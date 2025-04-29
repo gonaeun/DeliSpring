@@ -4,6 +4,7 @@ import com.example.DeliSpring.domain.auth.jwt.JwtProvider;
 import com.example.DeliSpring.domain.auth.jwt.JwtToken;
 import com.example.DeliSpring.domain.user.entity.User;
 import com.example.DeliSpring.domain.user.repository.UserRepository;
+import com.example.DeliSpring.global.enums.Role;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,7 @@ class AuthServiceTest {
         Mockito.when(jwtProvider.extractUserId(refreshToken)).thenReturn(userId); // refreshToken을 파싱했을 때, userId를 1l로 반환하도록
         Mockito.when(userRepository.findById(userId))
             .thenReturn(Optional.of(User.builder().refreshToken(refreshToken).build())); // userId가 호출되면 refreshToken을 가지고 있는 가짜 user객체를 반환하도록
-        Mockito.when(jwtProvider.generateAccessToken(userId)).thenReturn(accessToken); // userId로 새로운 AccessToken 발급하는 메서드 호출되면, "accessToken"라는 문자열 반환
+        Mockito.when(jwtProvider.generateAccessToken(userId, Role.USER)).thenReturn(accessToken); // userId로 새로운 AccessToken 발급하는 메서드 호출되면, "accessToken"라는 문자열 반환
 
         //when : 토큰 재발급 메서드 실행
         JwtToken token = authService.reIssue("Bearer " + refreshToken);

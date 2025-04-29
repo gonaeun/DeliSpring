@@ -65,7 +65,7 @@ public class AuthService {  // 인증 로직 수행
             saveToken(findUser.getId(), refreshToken);
         }
 
-        String accessToken = jwtProvider.generateAccessToken(findUser.getId());
+        String accessToken = jwtProvider.generateAccessToken(findUser.getId(), findUser.getRole());
 
         return JwtToken.builder()
             .grantType("Bearer")
@@ -100,7 +100,10 @@ public class AuthService {  // 인증 로직 수행
             throw new ApiException(ErrorType.REFRESH_TOKEN_MISMATCH);
         }
 
-        String newAccessToken = jwtProvider.generateAccessToken(userId); // 같다면, AccessToken 새로 발급
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new ApiException(ErrorType.USER_NOT_FOUND));
+
+        String newAccessToken = jwtProvider.generateAccessToken(userId, user.getRole()); // 같다면, AccessToken 새로 발급
         return JwtToken.builder()
             .grantType("Bearer")
             .accessToken(newAccessToken)
