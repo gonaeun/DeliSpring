@@ -14,33 +14,37 @@ Spring Boot 기반의 배달 서비스 백엔드 프로젝트입니다.
 
 ## 📚 목차
 
-- [기술 스택](#-기술-스택)
-- [와이어프레임](#-erd--아키텍처)
-- [ERD](#-erd--아키텍처)
-- [API 문서]
-- [주요 서비스 소개]
-- [주요 개발 포인트]
-- [트러블슈팅 및 회고]
+- [🛠기술 스택](#🛠-기술-스택)
+- [🎨와이어프레임](#🎨-와이어프레임)
+- [🧩ERD 및 문서 구조](#🧩-erd-및-문서-구조)
+- [🌐API 명세서](#🌐-api-명세서)
+- [💡주요 서비스 소개](#💡-주요-서비스-소개)
+- [✨주요 개발 포인트](#✨-주요-개발-포인트)
+- [🚀트러블슈팅 및 회고](#🚀-트러블슈팅-및-회고)
 
 ---
 
 ## 🛠 기술 스택
-Backend : Java, Spring Boot 3, Spring Security, JWT
-DB : MySQL
-ORM : JPA, Hibernate
-AOP : Spring AOP
-TEST : JUnit5, Mockito, SpringBootTest
-API DEVELOPMENT TOOL : Postman
+- Backend : Java, Spring Boot 3, Spring Security, JWT
+- DB : MySQL
+- ORM : JPA, Hibernate
+- AOP : Spring AOP
+- TEST : JUnit5, Mockito, SpringBootTest
+- API DEVELOPMENT TOOL : Postman
+
 
 ---
 
 ## 🎨 와이어 프레임
-링크 첨부 예정
+![image](https://github.com/user-attachments/assets/c2d33bb2-a6f0-45a0-af49-ccc85aa49627)
+![image](https://github.com/user-attachments/assets/67b90e73-6274-47df-a078-10a355cdf9d2)
+![image](https://github.com/user-attachments/assets/d5a1f25a-cdd3-4e32-a69f-2a2ff1c38e45)
 
 ---
 
 ## 🧩 ERD 및 문서 구조
-- 링크 첨부 예정
+![ERD](https://github.com/user-attachments/assets/62b0166e-09be-4a1e-90bc-3a2368bb88f2)
+
 - 도메인 중심 구조
 
 ```text
@@ -123,40 +127,38 @@ API DEVELOPMENT TOOL : Postman
     │   └── resources
     │        └── application.properties
     └── test
-
-
 ```
 ---
 
-## 🌐 API 명세
-링크첨부예정
+## 🌐 API 명세서
+ 📮 [POSTMAN API 명세서](https://documenter.getpostman.com/view/43269199/2sB2j3BXX3)
 
 ---
 
 ## 💡 주요 서비스 소개
-### 1. 회원가입 / 로그인 / 탈퇴 / 정보 수정
+#### 1. 회원가입 / 로그인 / 탈퇴 / 정보 수정
 - 이메일 기반 회원가입 및 JWT 로그인 구현
 - 비밀번호는 Bcrypt로 암호화하여 보안 강화
 - 사용자 권한을 일반 사용자(USER)와 사장님(OWNER)으로 분리하여 서비스 제공
 - 탈퇴 시 비밀번호 확인 후, Soft Delete 방식으로 처리
 
-### 2. 가게 관리 (사장님만 접근 가능)
+#### 2. 가게 관리 (사장님만 접근 가능)
 - 사장님은 가게를 최대 3개까지 등록 가능
 - 가게는 오픈/마감 시간, 최소 주문 금액 등의 정보를 포함
 - 폐업 시 상태만 변경되며, 이후 다시 가게 등록 가능
 
-### 3. 메뉴 관리
+#### 3. 메뉴 관리
 - 메뉴 생성, 수정, 삭제는 사장님만 가능
 - 메뉴 삭제는 실제 데이터를 삭제하는 것이 아니라, Soft Delete 방식으로 처리
 - 메뉴는 가게 단건 조회 시에만 함께 조회됨
 
-### 4. 주문
+#### 4. 주문
 - 고객은 메뉴를 선택하여 주문당 메뉴 하나씩만 주문 가능
 - 주문 시 최소 주문 금액 및 영업 시간 체크
 - 사장님은 주문 상태를 순차적으로 변경 가능 (`REQUESTED` → `ACCEPTED` → `COOKING` → `DELIVERING` → `COMPLETED`)
 - 주문 상태 변경 시 OrderLog 엔티티에 자동으로 로그 기록 (AOP 적용)
 
-### 5. 리뷰
+#### 5. 리뷰
 - 고객은 배달 완료된 주문에 대해서만 리뷰 작성 가능
 - 리뷰는 별점(1~5점) 및 코멘트로 구성
 - 리뷰는 가게 기준으로 최신순 정렬 및 별점 필터링 조회 가능
@@ -166,29 +168,30 @@ API DEVELOPMENT TOOL : Postman
 
 ## ✨ 주요 개발 포인트
 
-### 인증 및 권한 관리 (JWT)
+#### 1. 인증 및 권한 관리 (JWT)
 - Spring Security와 JWT 기반으로 회원 인증 및 인가(Authorization)를 구현했습니다.
 - 모든 API 요청은 `JwtAuthenticationFilter`를 통해 인증 과정을 처리합니다.
 - `UserDetails`를 커스터마이징하여 인증된 사용자 정보에서 `userId`를 직접 꺼낼 수 있도록 개선했으며,  
   이로 인해 서비스 계층에서 매번 Repository를 조회할 필요 없이 효율적으로 사용자 정보를 활용할 수 있습니다.
 - AccessToken/RefreshToken 발급 및 재발급 기능을 통해 토큰 기반 세션 관리를 설계했습니다.
 
-### 공통 로직 분리 (AOP)
+#### 2. 공통 로직 분리 (AOP)
 - 반복되는 권한 체크, 주문 상태 변경 기록의 로직을 `@Aspect` 기반 AOP로 분리했습니다.
 - 사용자 권한(USER, OWNER)에 따라 API 접근을 분기 처리하여 보안을 강화했습니다.
 
-### 주문 이력 관리
+#### 3. 주문 이력 관리
 - 주문 생성 및 상태 변경 시마다 `OrderLog` 엔티티를 통해 변경 이력을 저장하였습니다.
 - 추후에 주문의 흐름만 히스토리 기반으로 추적할 수 있어서 관리에 용이합니다.
 
-### 예외 처리의 일관성
+#### 4. 예외 처리의 일관성
 - 인증 실패, 권한 오류, 데이터 유효성 실패 등 다양한 예외 상황을 일관된 포맷으로 처리하였습니다.
 
-### 테스트 코드 작성 (TDD 지향)
+#### 5. 테스트 코드 작성 (TDD 지향)
 - `JUnit5`와 `Mockito`를 활용하여 단위 테스트를 작성했습니다.
 
 ---
 
 ## 🚀 트러블슈팅 및 회고
-🧾 https://codinghanni.tistory.com/69
+🧾 [블로그 포스팅 확인하기](https://codinghanni.tistory.com/69)
+
 
