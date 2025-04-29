@@ -11,12 +11,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "order_logs") // 테이블 이름 명시
 @Getter
 @NoArgsConstructor
 public class OrderLog {  // 주문 상태 변경 로그를 저장하는 용도 >> 나중에 고객이 주문 히스토리를 확인하도록 하기 위함
