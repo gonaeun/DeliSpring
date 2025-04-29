@@ -33,7 +33,8 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/auth/login",
                     "/auth/reissue",
-                    "/auth/signup")
+                    "/auth/signup",
+                    "/stores")
                 .permitAll() // 인증 없이 허용
                 .anyRequest().authenticated()) // 나머지는 인증 필요
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
