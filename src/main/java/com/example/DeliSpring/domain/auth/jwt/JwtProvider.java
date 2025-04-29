@@ -154,5 +154,9 @@ public class JwtProvider {
             return e.getClaims();
         }
     }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
 }
 

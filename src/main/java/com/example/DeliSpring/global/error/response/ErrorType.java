@@ -22,6 +22,7 @@ public enum ErrorType implements ExceptionStatus{
     UNAUTHORIZED_USER(1010, HttpStatus.UNAUTHORIZED.value(), "인증된 사용자만 접근할 수 있습니다."),
     FORBIDDEN_ACCESS(1011, HttpStatus.FORBIDDEN.value(), "권한이 없는 사용자입니다."),
     INVALID_PASSWORD(1012, HttpStatus.UNAUTHORIZED.value(), "비밀번호가 일치하지 않습니다."),
+    VALIDATION_FAILED(1013, HttpStatus.UNAUTHORIZED.value(), "유효성 검사를 실패하였습니다."),
 
 
     /**
